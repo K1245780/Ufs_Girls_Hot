@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <form id="loginForm" class="login-form">
+            <h2><i class="fas fa-lock"></i> Admin Login</h2>
+            <input type="email" id="email" placeholder="admin@saxvideogirls.com" required>
+            <input type="password" id="password" placeholder="পাসওয়ার্ড" required>
+            <button type="submit">লগইন <i class="fas fa-sign-in-alt"></i></button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const res = await fetch('../api/auth.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email, password, action: 'login'})
+            });
+            
+            const data = await res.json();
+            if(data.success) {
+                localStorage.setItem('adminToken', data.token);
+                window.location.href = 'index.html';
+            } else {
+                alert(data.message);
+            }
+        };
+    </script>
+</body>
+</html>
